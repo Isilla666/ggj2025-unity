@@ -25,7 +25,7 @@ namespace InGameBehaviours
         public event Action<string> OnUserStartShakeEvent;
         public event Action<string, int> OnUserStopEvent;
         public event Action<string> OnUserNoTimeStopEvent;
-        
+
         private void OnEnable()
         {
             _signal = SignalRegistration<ISignalInvoke>.Resolve();
@@ -54,6 +54,9 @@ namespace InGameBehaviours
 
         public void BanUser(string userId, string reason) =>
             _signal.SendToClient(userId, "you-lose", reason);
+
+        public void SendClientCharacter(string userId, string playerSit) =>
+            _signal.SendToClient(userId, "you-info", playerSit);
 
         private void OnMethodInvoked(string method, CustomUserDataEvent.UserData data)
         {
