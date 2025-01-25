@@ -1,17 +1,18 @@
+using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
 public class DoTweenAnimationHandler : BaseAnimation
 {
-    [SerializeField] private DOTweenAnimation doTweenAnimation;
+    [SerializeField] private List<DOTweenAnimation> targets;
     
     public override void Animate()
     {
-        doTweenAnimation.DOPlay();
+        targets.ForEach(x=>x.DOPlay());
     }
 
     public override void StopAnimation()
     {
-        doTweenAnimation.DORewind();
+        targets.ForEach(x=>x.DORewind());
     }
 }

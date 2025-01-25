@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
     
     private Stack<Human> _freeHumans;
@@ -20,6 +21,11 @@ public class GameController : MonoBehaviour
     private void Start()
     {
         humans.ForEach(x => _freeHumans.Push(x));
+    }
+
+    public void StartGame()
+    {
+        pool.EnableBubbles();
     }
     
     private void AddHuman(Guid humanGuid)
