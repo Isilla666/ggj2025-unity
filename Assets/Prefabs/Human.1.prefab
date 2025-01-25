@@ -168,6 +168,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   humanName: 1
+  fadeDuration: 1
   humanAnimationModels:
   - HumanAnimation: 0
     Animations:

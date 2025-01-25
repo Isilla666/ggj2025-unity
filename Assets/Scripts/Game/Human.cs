@@ -6,6 +6,7 @@ using UnityEngine;
 public class Human : MonoBehaviour
 {
     [SerializeField] private string humanName;
+    [SerializeField] private float fadeDuration;
     [SerializeField] private List<HumanAnimationModel> humanAnimationModels;
     [SerializeField] private List<Fader> faders;
     
@@ -21,6 +22,12 @@ public class Human : MonoBehaviour
     private void Start()
     {
         ChangeAnimation(HumanAnimation.Idle);
+    }
+
+    [Button]
+    public void FadeHuman()
+    {
+        faders.ForEach(x=>x.Fade(fadeDuration));
     }
 
     [Button]
