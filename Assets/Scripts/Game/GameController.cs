@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour
     
     private Stack<Human> _freeHumans;
     private List<HumanData> _humanDatas;
-
+    
     public event Action<string, string> OnAddHuman;
     
     private void Awake()
@@ -22,9 +22,58 @@ public class GameController : MonoBehaviour
     
     private void Start()
     {
+        backendUserManager.OnUserConnectedEvent += AddHuman;
+        backendUserManager.OnUserDisconnectedEvent += BackendUserManagerOnOnUserDisconnectedEvent;
+        backendUserManager.OnUserStopEvent += BackendUserManagerOnOnUserStopEvent;
+        backendUserManager.OnUserStartShakeEvent += BackendUserManagerOnOnUserStartShakeEvent;
+        backendUserManager.OnUserNoTimeStopEvent += BackendUserManagerOnOnUserNoTimeStopEvent;
         humans.ForEach(x => _freeHumans.Push(x));
     }
-
+    
+    private void BackendUserManagerOnOnUserNoTimeStopEvent(string humanGuid)
+    {
+        //todo проверка
+        foreach (var humanData in _humanDatas)
+        {
+            if (humanData.Guid == humanGuid)
+            {
+                humanData.Health--;
+                if (humanData.Health <= 0)
+                {
+                    humanData.Human.FadeHuman();
+                }
+            }
+        }
+    }
+    
+    private void BackendUserManagerOnOnUserStartShakeEvent(string humanGuid)
+    {
+        //todo проверка
+        foreach (var humanData in _humanDatas)
+        {
+            if (humanData.Guid == humanGuid)
+            {
+                humanData.Human.ChangeAnimation(HumanAnimation.Dancing);
+            }
+        }
+    }
+    
+    private void BackendUserManagerOnOnUserStopEvent(string humanGuid, int time)
+    {
+        
+    }
+    
+    private void BackendUserManagerOnOnUserDisconnectedEvent(string humanGuid)
+    {
+        foreach (var humanData in _humanDatas)
+        {
+            if (humanData.Guid == humanGuid)
+            {
+                humanData.Human.FadeHuman();
+            }
+        }
+    }
+    
     public void StartGame()
     {
         pool.EnableBubbles();
@@ -43,7 +92,7 @@ public class GameController : MonoBehaviour
             };
             
             _humanDatas.Add(humanData);
-            
+            backendUserManager.SendClientCharacter(humanData.Guid, humanData.HumanName);
             OnAddHuman?.Invoke(humanData.HumanName, humanData.Guid);
         }
     }
