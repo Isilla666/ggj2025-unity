@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
+using ForTests.Examples;
 using InGameBehaviours;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
     [SerializeField] private BackendUserManager backendUserManager;
+    [SerializeField] private SonyEricssonPlayer sonyEricssonPlayer;
     [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
     

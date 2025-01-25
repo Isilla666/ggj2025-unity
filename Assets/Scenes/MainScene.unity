@@ -6769,7 +6769,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 556a77f6203b0d442ae01097aadf53ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  backendUserManager: {fileID: 0}
+  backendUserManager: {fileID: 1200687720}
+  sonyEricssonPlayer: {fileID: 0}
   pool: {fileID: 1598277113}
   humans:
   - {fileID: 1921919760}
@@ -7146,6 +7147,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1419783142}
   - component: {fileID: 1419783143}
+  - component: {fileID: 1419783145}
   - component: {fileID: 1419783144}
   m_Layer: 0
   m_Name: Video Player
@@ -7199,13 +7201,49 @@ VideoPlayer:
   m_EnabledAudioTracks: 01
   m_DirectAudioMutes: 00
   m_ControlledAudioTrackCount: 1
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_SkipOnDrop: 1
   m_Looping: 1
   m_WaitForFirstFrame: 1
   m_FrameReadyEventEnabled: 0
   m_VideoShaders: []
---- !u!114 &1419783144
+--- !u!328 &1419783144
+VideoPlayer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419783141}
+  m_Enabled: 1
+  m_VideoClip: {fileID: 0}
+  m_TargetCameraAlpha: 1
+  m_TargetCamera3DLayout: 0
+  m_TargetCamera: {fileID: 0}
+  m_TargetTexture: {fileID: 0}
+  m_TimeReference: 0
+  m_TargetMaterialRenderer: {fileID: 0}
+  m_TargetMaterialProperty: <noninit>
+  m_RenderMode: 2
+  m_AspectRatio: 2
+  m_DataSource: 0
+  m_TimeUpdateMode: 2
+  m_PlaybackSpeed: 1
+  m_AudioOutputMode: 2
+  m_TargetAudioSources:
+  - {fileID: 0}
+  m_DirectAudioVolumes:
+  - 1
+  m_Url: 
+  m_EnabledAudioTracks: 01
+  m_DirectAudioMutes: 00
+  m_ControlledAudioTrackCount: 1
+  m_PlayOnAwake: 0
+  m_SkipOnDrop: 1
+  m_Looping: 1
+  m_WaitForFirstFrame: 1
+  m_FrameReadyEventEnabled: 0
+  m_VideoShaders: []
+--- !u!114 &1419783145
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -7214,13 +7252,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 1419783141}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb0d6d0122a16594ca9a84f076f36156, type: 3}
+  m_Script: {fileID: 11500000, guid: 42a7841b795b4792abbc658c6bfb0222, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 1419783143}
-  videoClips:
-  - {fileID: 32900000, guid: 0b3b19358f5d1bc4db2182e0159b742c, type: 3}
-  - {fileID: 32900000, guid: 2e3165671cc12474ab92845da9b2c87b, type: 3}
+  activeSource: {fileID: 1419783143}
+  stopSource: {fileID: 1419783144}
+  videoData:
+  - activeClip: {fileID: 32900000, guid: 0b3b19358f5d1bc4db2182e0159b742c, type: 3}
+    stopClip: {fileID: 32900000, guid: 2e3165671cc12474ab92845da9b2c87b, type: 3}
+  - activeClip: {fileID: 32900000, guid: 0b3b19358f5d1bc4db2182e0159b742c, type: 3}
+    stopClip: {fileID: 32900000, guid: 2e3165671cc12474ab92845da9b2c87b, type: 3}
+  - activeClip: {fileID: 32900000, guid: 0b3b19358f5d1bc4db2182e0159b742c, type: 3}
+    stopClip: {fileID: 32900000, guid: 2e3165671cc12474ab92845da9b2c87b, type: 3}
 --- !u!1001 &1425940372
 PrefabInstance:
   m_ObjectHideFlags: 0
