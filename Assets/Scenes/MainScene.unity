@@ -182,6 +182,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6545804470797362445, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7690888886357215007, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: delay
       value: 0.05
@@ -477,6 +481,10 @@ PrefabInstance:
     - target: {fileID: 5451661606520992637, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6545804470797362445, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_FlipX
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7690888886357215007, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: delay
@@ -1194,6 +1202,10 @@ PrefabInstance:
       propertyPath: delay
       value: 0.13
       objectReference: {fileID: 0}
+    - target: {fileID: 6545804470797362445, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7690888886357215007, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: delay
       value: 0.13
@@ -1755,6 +1767,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6545804470797362445, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_FlipX
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7690888886357215007, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: delay
       value: 0.12
@@ -1935,6 +1951,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5451661606520992637, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6545804470797362445, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_FlipX
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7690888886357215007, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
