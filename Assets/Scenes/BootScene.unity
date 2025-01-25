@@ -840,8 +840,11 @@ GameObject:
   - component: {fileID: 1850301040}
   - component: {fileID: 1850301044}
   - component: {fileID: 1850301043}
-  - component: {fileID: 1850301042}
   - component: {fileID: 1850301041}
+  - component: {fileID: 1850301047}
+  - component: {fileID: 1850301046}
+  - component: {fileID: 1850301042}
+  - component: {fileID: 1850301045}
   m_Layer: 0
   m_Name: '[SignalR] Host'
   m_TagString: Untagged
@@ -894,6 +897,7 @@ MonoBehaviour:
   onValueChanged:
     m_PersistentCalls:
       m_Calls: []
+  methodName: start-shaking
 --- !u!114 &1850301043
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -922,10 +926,60 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   HubUrl: https://gorbulka.ru/online/hub
+  maxPlayers: 10
   subscribers:
   - {fileID: 1850301043}
-  - {fileID: 1850301042}
   - {fileID: 1850301041}
+  - {fileID: 1850301047}
+  - {fileID: 1850301046}
+  - {fileID: 1850301042}
+  - {fileID: 1850301045}
+--- !u!114 &1850301045
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850301039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f9ba5e13fa84cef98c250cb6ddcf912, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  methodName: stop-shaking
+--- !u!114 &1850301046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850301039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6f59a3fbff2a45849121d9cf5ed448bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
+--- !u!114 &1850301047
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850301039}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a299b2a45e484bceb182ef29258e0433, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  onValueChanged:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!1 &1943151800
 GameObject:
   m_ObjectHideFlags: 0
