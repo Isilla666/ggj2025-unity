@@ -56,18 +56,35 @@ public class GameController : MonoBehaviour
     private void BackendUserManagerOnOnUserStartShakeEvent(string humanGuid)
     {
         //todo проверка
-        foreach (var humanData in _humanDatas)
+        if(_musicStarted)
         {
-            if (humanData.Guid == humanGuid)
+            foreach (var humanData in _humanDatas)
             {
-                humanData.Human.ChangeAnimation(HumanAnimation.Dancing);
+                if (humanData.Guid == humanGuid)
+                {
+                    humanData.Human.ChangeAnimation(HumanAnimation.Dancing);
+                }
             }
         }
     }
     
     private void BackendUserManagerOnOnUserStopEvent(string humanGuid, int time)
     {
-        
+        if(!_musicStarted)
+        {
+            if (time > 1000)
+            {
+                _killList.Add(humanGuid);
+            }
+
+            foreach (var humanData in _humanDatas)
+            {
+                if (humanData.Guid == humanGuid)
+                {
+                    humanData.Human.ChangeAnimation(HumanAnimation.Idle);
+                }
+            }
+        }
     }
     
     private void BackendUserManagerOnOnUserDisconnectedEvent(string humanGuid)
@@ -83,10 +100,13 @@ public class GameController : MonoBehaviour
         }*/
     }
     
+    [Button]
     public void StartGame()
     {
         _musicStarted = true;
+        backendUserManager.StateStart();
         pool.EnableBubbles();
+        _humanDatas.ForEach(x=>x.Human.ChangeAnimation(HumanAnimation.Idle));
         sonyEricssonPlayer.NextClip(ClipEnd);
     }
     
@@ -102,8 +122,9 @@ public class GameController : MonoBehaviour
     private IEnumerator WaitForDead()
     {
         _musicStarted = false;
+        backendUserManager.StateStop();
         pool.DisableBubbles();
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(3f);
         if (_killList.Count > 0)
         {
             foreach (var killMan in _killList)
@@ -127,9 +148,13 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(2f);
         }
+        _killList.ForEach(x=>_humanDatas.RemoveAll(y=>y.Guid == x));
+        _killList.Clear();
         _musicStarted = true;
+        backendUserManager.StateStart();
+        _humanDatas.ForEach(x=>x.Human.ChangeAnimation(HumanAnimation.Idle));
         pool.EnableBubbles();
         sonyEricssonPlayer.NextClip(ClipEnd);
     }
@@ -145,6 +170,8 @@ public class GameController : MonoBehaviour
                 Guid = humanGuid,
                 Human = human
             };
+            
+            human.gameObject.SetActive(true);
             
             _humanDatas.Add(humanData);
             backendUserManager.SendClientCharacter(humanData.Guid, humanData.HumanName);

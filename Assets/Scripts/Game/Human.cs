@@ -47,5 +47,10 @@ public class Human : MonoBehaviour
                 }
             }
         }
+
+        if (humanAnimation == HumanAnimation.PoopMoment)
+        {
+            Invoke(nameof(FadeHuman), 5f);
+        }
     }
 }
