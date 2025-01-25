@@ -29,10 +29,14 @@ namespace Backend
                 await DisposeHub();
 
             _hubConnection = await CreateConnectionAsync();
-            if (maxPlayers > 0)
-                await _hubConnection.InvokeAsync("SetRoomPlayers", maxPlayers);
+
             RegisterServices();
-            return _hubConnection != null && _hubConnection.State == HubConnectionState.Connected;
+
+            bool connected = _hubConnection != null && _hubConnection.State == HubConnectionState.Connected;
+            if (maxPlayers > 0 && connected)
+                await _hubConnection.InvokeAsync("SetRoomPlayers", maxPlayers);
+
+            return connected;
         }
 
         private async void OnApplicationQuit() =>
