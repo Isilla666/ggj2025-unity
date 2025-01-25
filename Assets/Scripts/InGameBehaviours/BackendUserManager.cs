@@ -1,33 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Backend.Events;
 using Backend.Invoker;
 using Backend.Messages;
 using Backend.Registration;
 using UnityEngine;
 
-namespace ForTests.Examples
+namespace InGameBehaviours
 {
-    public class UsersHolder : MonoBehaviour
+    public class BackendUserManager : MonoBehaviour
     {
-        public TestPlayer playerPrefab;
-        public Transform playerParent;
-
-        // TODO update with backend
         private ICustomMethodSignalListener _signalListener;
         private ISignalListener<ClientConnectedEvent.ClientData> _connectedListener;
         private ISignalListener<ClientConnectedEvent.ClientData> _disconnectedListener;
-
         private ISignalInvoke _signal;
+        private readonly Dictionary<string, ClientConnectedEvent.ClientData> _connectedUsers = new(24);
 
-        private readonly Dictionary<string, TestPlayer> _testPlayers = new(24);
-        private readonly Dictionary<string, Action<CustomUserDataEvent.UserData>> _mappingMethods = new();
-
-        private void Awake()
-        {
-            _mappingMethods["start-shaking"] = OnUserStartShake;
-            _mappingMethods["stop-shaking"] = OnUserStopShake;
-        }
+        public IDictionary<string, string> GetUsersWithNames() =>
+            _connectedUsers.ToDictionary(x => x.Key, v => v.Value.UserName);
 
         private void OnEnable()
         {
@@ -48,21 +38,9 @@ namespace ForTests.Examples
             _signalListener.OnEvent -= OnMethodInvoked;
         }
 
-        private void OnMethodInvoked(string arg1, CustomUserDataEvent.UserData arg2)
-        {
-            if (_mappingMethods.TryGetValue(arg1, out var act))
-                act?.Invoke(arg2);
-            else
-                Debug.LogError($"No one method for {arg1}");
-        }
 
-        public void StateStart()
-        {
-            foreach (var player in _testPlayers.Values)
-                player.ClearTimes();
-
+        public void StateStart() =>
             _signal.SendToClients("start-music", null);
-        }
 
         public void StateStop() =>
             _signal.SendToClients("stop-music", null);
@@ -70,6 +48,13 @@ namespace ForTests.Examples
         public void BanUser(string userId, string reason) =>
             _signal.SendToClient(userId, "you-lose", reason);
 
+        private void OnMethodInvoked(string method, CustomUserDataEvent.UserData data)
+        {
+            if (method == "start-shaking")
+                OnUserStartShake(data);
+            else if (method == "stop-shaking")
+                OnUserStopShake(data);
+        }
 
         private void OnClientConnected(ClientConnectedEvent.ClientData data)
         {
@@ -78,15 +63,7 @@ namespace ForTests.Examples
              *  По идее здесь мы должны создать персонажа для игрока, посадить персонажа и отправить данные о персонаже игроку в браузер
              */
 
-            if (_testPlayers.TryGetValue(data.UserId, out var player))
-                player.OnConnected(data.UserName);
-            else
-            {
-                player = Instantiate(playerPrefab, playerParent, false);
-                player.OnConnected(data.UserName);
-                _testPlayers[data.UserId] = player;
-                _signal.SendToClient(data.UserId, "gameState", 1);
-            }
+            _connectedUsers[data.UserId] = data;
         }
 
         private void OnClientDisconnected(ClientConnectedEvent.ClientData data)
@@ -96,12 +73,7 @@ namespace ForTests.Examples
              *  По идее здесь мы должны удалить персонажа игрока
              */
 
-
-            if (_testPlayers.TryGetValue(data.UserId, out var player) == false)
-                return;
-
-            Destroy(player.gameObject);
-            _testPlayers.Remove(data.UserId);
+            _connectedUsers.Remove(data.UserId);
         }
 
         private void OnUserStartShake(CustomUserDataEvent.UserData data)
@@ -110,9 +82,6 @@ namespace ForTests.Examples
              * TODO
              *  Метод, который вызывается, когда игрок трясет
              */
-
-            if (_testPlayers.TryGetValue(data.UserId, out var player))
-                player.OnShake();
         }
 
         private void OnUserStopShake(CustomUserDataEvent.UserData data)
@@ -125,13 +94,16 @@ namespace ForTests.Examples
              */
 
 
-            if (_testPlayers.TryGetValue(data.UserId, out var player))
-            {
-                player.OnStopShake();
+            bool hasTime = !string.IsNullOrEmpty(data.UserCustomData.ToString()) &&
+                           int.TryParse(data.UserCustomData.ToString(), out var time);
 
-                var dataStr = data.UserCustomData.ToString();
-                if (!string.IsNullOrEmpty(dataStr) && int.TryParse(dataStr, out var val))
-                    player.OnStopShakeByTime(val);
+            if (hasTime)
+            {
+                // Если время есть - остановили после того, как музыка остановилась
+            }
+            else
+            {
+                // Если времени нет - остановили во время музыки
             }
         }
     }

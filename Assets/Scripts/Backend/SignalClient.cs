@@ -13,6 +13,8 @@ namespace Backend
     {
         public string HubUrl;
 
+        [SerializeField] private int maxPlayers;
+
         private void Awake() => DontDestroyOnLoad(gameObject);
 
         public SubscriberMono[] subscribers;
@@ -27,6 +29,8 @@ namespace Backend
                 await DisposeHub();
 
             _hubConnection = await CreateConnectionAsync();
+            if (maxPlayers > 0)
+                await _hubConnection.InvokeAsync("SetRoomPlayers", maxPlayers);
             RegisterServices();
             return _hubConnection != null && _hubConnection.State == HubConnectionState.Connected;
         }
