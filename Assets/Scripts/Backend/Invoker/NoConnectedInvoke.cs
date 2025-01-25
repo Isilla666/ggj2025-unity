@@ -8,5 +8,11 @@ namespace Backend.Invoker
 
         public UniTask SendCommandToChangeState(int state) =>
             UniTask.CompletedTask;
+
+        public UniTask SendToClients(string method, object data) =>
+            UniTask.CompletedTask;
+
+        public UniTask SendToClient(string clientId, string method, object data) =>
+            UniTask.CompletedTask;
     }
 }

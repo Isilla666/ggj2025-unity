@@ -2,7 +2,7 @@
 
 namespace Backend.Events
 {
-    public class RoomCodeEvent : JsonEvent<RoomCodeEvent.Room>
+    public sealed class RoomCodeEvent : JsonEvent<RoomCodeEvent.Room>
     {
         protected override string MethodName => "room-code";
 

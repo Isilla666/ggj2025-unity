@@ -6,16 +6,25 @@ using UnityEngine.Events;
 
 namespace Backend.Events
 {
-    public abstract class AbstractEvent<TInput, TOutput> : SubscriberMono, ISignalListener<TOutput>
+    public abstract class AbstractEvent<TInput, TOutput> : SubscriberMono,
+        ISignalListener<TOutput>
     {
         public TOutput Data { get; private set; }
-        
+
         public UnityEvent<TOutput> onValueChanged;
 
         protected abstract string MethodName { get; }
 
-        public override void Subscribe(HubConnection connection) =>
+        public override void Subscribe(HubConnection connection)
+        {
+            if (string.IsNullOrEmpty(MethodName))
+            {
+                Debug.LogError($"For {gameObject.name} method name is does not exists.");
+                return;
+            }
+
             DisposableListener = connection.On<TInput>(MethodName, ValueChanged);
+        }
 
         protected virtual void ValueChanged(TInput arg)
         {
