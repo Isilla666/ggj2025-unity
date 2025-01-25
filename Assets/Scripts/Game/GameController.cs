@@ -1,16 +1,18 @@
 using System;
 using System.Collections.Generic;
+using InGameBehaviours;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
 {
+    [SerializeField] private BackendUserManager backendUserManager;
     [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
     
     private Stack<Human> _freeHumans;
     private List<HumanData> _humanDatas;
 
-    public event Action<string, Guid> OnAddHuman;
+    public event Action<string, string> OnAddHuman;
     
     private void Awake()
     {
@@ -28,7 +30,7 @@ public class GameController : MonoBehaviour
         pool.EnableBubbles();
     }
     
-    private void AddHuman(Guid humanGuid)
+    private void AddHuman(string humanGuid)
     {
         if (_freeHumans.Count > 0)
         {

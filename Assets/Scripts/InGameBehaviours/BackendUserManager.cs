@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Backend.Events;
 using Backend.Invoker;
@@ -19,6 +20,12 @@ namespace InGameBehaviours
         public IDictionary<string, string> GetUsersWithNames() =>
             _connectedUsers.ToDictionary(x => x.Key, v => v.Value.UserName);
 
+        public event Action<string> OnUserConnectedEvent;
+        public event Action<string> OnUserDisconnectedEvent;
+        public event Action<string> OnUserStartShakeEvent;
+        public event Action<string, int> OnUserStopEvent;
+        public event Action<string> OnUserNoTimeStopEvent;
+        
         private void OnEnable()
         {
             _signal = SignalRegistration<ISignalInvoke>.Resolve();
@@ -62,7 +69,7 @@ namespace InGameBehaviours
              * TODO
              *  По идее здесь мы должны создать персонажа для игрока, посадить персонажа и отправить данные о персонаже игроку в браузер
              */
-
+            OnUserConnectedEvent?.Invoke(data.UserId);
             _connectedUsers[data.UserId] = data;
         }
 
@@ -72,7 +79,7 @@ namespace InGameBehaviours
              * TODO
              *  По идее здесь мы должны удалить персонажа игрока
              */
-
+            OnUserDisconnectedEvent?.Invoke(data.UserId);
             _connectedUsers.Remove(data.UserId);
         }
 
@@ -82,6 +89,7 @@ namespace InGameBehaviours
              * TODO
              *  Метод, который вызывается, когда игрок трясет
              */
+            OnUserStartShakeEvent?.Invoke(data.UserId);
         }
 
         private void OnUserStopShake(CustomUserDataEvent.UserData data)
@@ -93,17 +101,18 @@ namespace InGameBehaviours
              *      через сколько остановили тряску
              */
 
-
-            bool hasTime = !string.IsNullOrEmpty(data.UserCustomData.ToString()) &&
-                           int.TryParse(data.UserCustomData.ToString(), out var time);
-
-            if (hasTime)
+            if (string.IsNullOrEmpty(data.UserCustomData.ToString()))
             {
-                // Если время есть - остановили после того, как музыка остановилась
+                if (int.TryParse(data.UserCustomData.ToString(), out var time))
+                {
+                    // Если время есть - остановили после того, как музыка остановилась
+                    OnUserStopEvent?.Invoke(data.UserId, time);
+                }
             }
             else
             {
                 // Если времени нет - остановили во время музыки
+                OnUserNoTimeStopEvent?.Invoke(data.UserId);
             }
         }
     }
