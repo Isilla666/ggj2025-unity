@@ -1,5 +1,6 @@
 ﻿using System;
 using Backend.Invoker;
+using Backend.Messages;
 using Backend.Registration;
 using Cysharp.Threading.Tasks;
 using Microsoft.AspNetCore.SignalR.Client;
@@ -26,7 +27,7 @@ namespace Backend
                 await DisposeHub();
 
             _hubConnection = await CreateConnectionAsync();
-            SignalRegistration<ISignalInvoke>.Register(_signalInvoke);
+            RegisterServices();
             return _hubConnection != null && _hubConnection.State == HubConnectionState.Connected;
         }
 
@@ -35,6 +36,18 @@ namespace Backend
 
         private async void OnDestroy() =>
             await DisposeHub();
+
+
+        private void RegisterServices()
+        {
+            SignalRegistration<ISignalInvoke>.Register(_signalInvoke);
+
+            if (TryGetComponent<CustomMethodSignalListener>(out var custom) == false)
+                custom = gameObject.AddComponent<CustomMethodSignalListener>();
+
+            SignalRegistration<ICustomMethodSignalListener>.Register(custom);
+            SignalRegistration<ICustomMethodInvoke>.Register(custom);
+        }
 
         private async UniTask<HubConnection> CreateConnectionAsync()
         {

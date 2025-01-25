@@ -1,6 +1,5 @@
 ﻿using System;
 using Cysharp.Threading.Tasks;
-using JetBrains.Annotations;
 using Microsoft.AspNetCore.SignalR.Client;
 using Newtonsoft.Json;
 
@@ -21,14 +20,27 @@ namespace Backend.Invoker
             if (_connection.State != HubConnectionState.Connected)
                 return;
 
-            await SendMethod("gameState", state);
+            await SendToClients("gameState", state);
         }
 
-        private async UniTask SendMethod(string method, object data)
+        public async UniTask SendToClients(string method, object data)
         {
-            var payload = new JsonPayload(method, data);
-            await _connection.SendAsync("SendToClients", JsonConvert.SerializeObject(payload));
+            if (_connection.State != HubConnectionState.Connected)
+                return;
+
+            var jsonPayload = new JsonPayload(method, data);
+            await _connection.SendAsync("SendToClients", JsonConvert.SerializeObject(jsonPayload));
         }
+
+        public async UniTask SendToClient(string clientId, string method, object data)
+        {
+            if (_connection.State != HubConnectionState.Connected)
+                return;
+
+            var jsonPayload = new JsonPayload(method, data);
+            await _connection.SendAsync("SendToClient", clientId, JsonConvert.SerializeObject(jsonPayload));
+        }
+
 
         [Serializable]
         public class JsonPayload

@@ -2,7 +2,7 @@
 
 namespace Backend.Events
 {
-    public class UpdateUsersEvent : JsonEvent<UpdateUsersEvent.UsersCount>
+    public sealed class UpdateUsersEvent : JsonEvent<UpdateUsersEvent.UsersCount>
     {
         protected override string MethodName => "clients-count";
 
