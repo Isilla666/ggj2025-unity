@@ -1,10 +1,13 @@
+using System;
 using System.Collections.Generic;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class Human : MonoBehaviour
 {
     [SerializeField] private string humanName;
     [SerializeField] private List<HumanAnimationModel> humanAnimationModels;
+    [SerializeField] private List<Fader> faders;
     
     private List<BaseAnimation> _currentAnimations;
 
@@ -15,6 +18,12 @@ public class Human : MonoBehaviour
         _currentAnimations = new List<BaseAnimation>();
     }
 
+    private void Start()
+    {
+        ChangeAnimation(HumanAnimation.Idle);
+    }
+
+    [Button]
     public void ChangeAnimation(HumanAnimation humanAnimation)
     {
         _currentAnimations.ForEach(x=>x.StopAnimation());
