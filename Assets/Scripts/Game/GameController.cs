@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using ForTests.Examples;
 using InGameBehaviours;
+using Sirenix.OdinInspector;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -13,13 +15,16 @@ public class GameController : MonoBehaviour
     
     private Stack<Human> _freeHumans;
     private List<HumanData> _humanDatas;
-    
+    private Coroutine _coWaitForDead;
+    private List<string> _killList;
+    private bool _musicStarted;
     public event Action<string, string> OnAddHuman;
     
     private void Awake()
     {
         _freeHumans = new Stack<Human>();
         _humanDatas = new List<HumanData>();
+        _killList = new List<string>();
     }
     
     private void Start()
@@ -42,7 +47,7 @@ public class GameController : MonoBehaviour
                 humanData.Health--;
                 if (humanData.Health <= 0)
                 {
-                    humanData.Human.FadeHuman();
+                    _killList.Add(humanData.Guid);
                 }
             }
         }
@@ -67,18 +72,66 @@ public class GameController : MonoBehaviour
     
     private void BackendUserManagerOnOnUserDisconnectedEvent(string humanGuid)
     {
-        foreach (var humanData in _humanDatas)
+        _killList.Add(humanGuid);
+        /*foreach (var humanData in _humanDatas)
         {
             if (humanData.Guid == humanGuid)
             {
                 humanData.Human.FadeHuman();
+                
             }
-        }
+        }*/
     }
     
     public void StartGame()
     {
+        _musicStarted = true;
         pool.EnableBubbles();
+        sonyEricssonPlayer.NextClip(ClipEnd);
+    }
+    
+    private void ClipEnd()
+    {
+        if (_coWaitForDead != null)
+        {
+            StopCoroutine(_coWaitForDead);
+        }
+        _coWaitForDead = StartCoroutine(WaitForDead());
+    }
+
+    private IEnumerator WaitForDead()
+    {
+        _musicStarted = false;
+        pool.DisableBubbles();
+        yield return new WaitForSeconds(2f);
+        if (_killList.Count > 0)
+        {
+            foreach (var killMan in _killList)
+            {
+                foreach (var humanData in _humanDatas)
+                {
+                    if (humanData.Guid == killMan)
+                    {
+                        humanData.Human.ChangeAnimation(HumanAnimation.PoopMoment);
+                    }
+                    else
+                    {
+                        if (!_killList.Contains(humanData.Guid))
+                        {
+                            humanData.Human.ChangeAnimation(HumanAnimation.Haha);
+                        }
+                    }
+                }
+            }
+            yield return new WaitForSeconds(10f);
+        }
+        else
+        {
+            yield return new WaitForSeconds(3f);
+        }
+        _musicStarted = true;
+        pool.EnableBubbles();
+        sonyEricssonPlayer.NextClip(ClipEnd);
     }
     
     private void AddHuman(string humanGuid)
