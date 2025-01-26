@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using DG.Tweening.Core;
 using ForTests.Examples;
 using InGameBehaviours;
 using Sirenix.OdinInspector;
@@ -28,6 +29,8 @@ public class GameController : MonoBehaviour
     private List<string> _tryaskaList;
 
     private bool _musicStarted;
+    private int msRange = 1000;
+    private int bindRange = 0;
     public event Action<string, string> OnAddHuman;
 
     private void Awake()
@@ -47,6 +50,30 @@ public class GameController : MonoBehaviour
         backendUserManager.OnUserStartShakeEvent += BackendUserManagerOnOnUserStartShakeEvent;
         backendUserManager.OnUserNoTimeStopEvent += BackendUserManagerOnOnUserNoTimeStopEvent;
         humans.ForEach(x => _freeHumans.Push(x));
+    }
+
+    private void Update()
+    {
+        int bindMs = 0;
+        for (int i = 48; i < 58; i++)
+        {
+            if (Input.GetKeyDown((KeyCode) i))
+            {
+                bindMs = (i - 48) * 1000;
+                break;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.LeftShift))
+            bindMs = bindMs / 10;
+
+        if (bindMs > 0)
+            bindRange = bindMs;
+    }
+
+    private void OnGUI()
+    {
+        GUI.Label(new Rect(3, 3, 2000, 20), $"{bindRange}  {msRange}");
     }
 
     private void BackendUserManagerOnOnUserNoTimeStopEvent(string humanGuid)
@@ -127,6 +154,10 @@ public class GameController : MonoBehaviour
     public void StartGame()
     {
         codeGameObject.SetActive(false);
+        if (bindRange > 0)
+            msRange = bindRange;
+
+        bindRange = 0;
         _musicStarted = true;
         backendUserManager.StateStart();
         pool.EnableBubbles();
