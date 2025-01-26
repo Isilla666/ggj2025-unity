@@ -648,7 +648,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3702178902446900669}
-  - {fileID: 1876683624777306506}
   m_Father: {fileID: 4746121008168951312}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2754994302940667029
@@ -718,6 +717,7 @@ Transform:
   m_Children:
   - {fileID: 1173179307157826914}
   - {fileID: 5710697523771427847}
+  - {fileID: 1876683624777306506}
   m_Father: {fileID: 3702178902446900669}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &465223153285828472
@@ -1419,16 +1419,16 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6934100649979708938}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5458768861694819933}
+  m_Father: {fileID: 7742041868175058442}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0.04, y: 4.26}
+  m_AnchoredPosition: {x: 0.053999938, y: 2.5220003}
   m_SizeDelta: {x: 3, y: 2}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!23 &8995566027765222114
@@ -1471,7 +1471,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 80
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &450876954024181744
 MonoBehaviour:

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using DG.Tweening;
 using TMPro;
 using UnityEngine;
@@ -15,14 +13,14 @@ public class UIkill : MonoBehaviour
 
     private bool _isEnabled;
     
-    public void ShowKill(string userName, Human human)
+    public void ShowKill(Human human)
     {
         if(!_isEnabled)
         {
             _isEnabled = true;
             
             icon.sprite = human.FailIcon;
-            title.text = userName;
+            title.text = human.PlayerName;
             gameObject.SetActive(true);
             DOTween.Sequence().AppendInterval(5f)
                 .AppendCallback(() =>
