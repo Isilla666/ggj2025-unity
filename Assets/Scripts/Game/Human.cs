@@ -6,6 +6,8 @@ using UnityEngine;
 public class Human : MonoBehaviour
 {
     [SerializeField] private string humanName;
+    [SerializeField] private Sprite failIcon;
+    [SerializeField] private Sprite winIcon;
     [SerializeField] private float fadeDuration;
     [SerializeField] private List<HumanAnimationModel> humanAnimationModels;
     [SerializeField] private List<Fader> faders;
@@ -13,6 +15,10 @@ public class Human : MonoBehaviour
     private List<BaseAnimation> _currentAnimations;
 
     public string HumanName => humanName;
+
+    public Sprite FailIcon => failIcon;
+
+    public Sprite WinIcon => winIcon;
 
     private void Awake() => _currentAnimations = new List<BaseAnimation>();
 
