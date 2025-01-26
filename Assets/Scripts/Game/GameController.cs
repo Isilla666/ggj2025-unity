@@ -13,6 +13,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private SonyEricssonPlayer sonyEricssonPlayer;
     [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
+    [SerializeField] private UIkill uiKill;
+
 
     private Stack<Human> _freeHumans;
     private Dictionary<string, HumanData> _humans;
@@ -22,7 +24,7 @@ public class GameController : MonoBehaviour
     private List<string> _killList;
     private List<string> _healthList;
     private List<string> _tryaskaList;
-    
+
     private bool _musicStarted;
     public event Action<string, string> OnAddHuman;
 
@@ -93,7 +95,7 @@ public class GameController : MonoBehaviour
         if (!_musicStarted)
         {
             _tryaskaList.Remove(humanGuid);
-            
+
             if (time > 1000)
             {
                 _killList.Add(humanGuid);
@@ -130,7 +132,7 @@ public class GameController : MonoBehaviour
 
         _healthList.AddRange(_humans.Keys);
         _tryaskaList.AddRange(_humans.Keys);
-        
+
         sonyEricssonPlayer.NextClip(ClipEnd);
     }
 
@@ -169,7 +171,7 @@ public class GameController : MonoBehaviour
         _healthList.Clear();
         yield return new WaitForSeconds(2f);
         var bannedPlayers = _killList.Union(_tryaskaList).ToList();
-        
+
         if (bannedPlayers.Count > 0)
         {
             foreach (var humanData in _humans.Values)
@@ -181,6 +183,16 @@ public class GameController : MonoBehaviour
                 else
                 {
                     humanData.Human.ChangeAnimation(HumanAnimation.Haha);
+                }
+            }
+
+
+            foreach (var bannedPlayer in bannedPlayers)
+            {
+                if (_humans.TryGetValue(bannedPlayer, out var banned))
+                {
+                    uiKill.ShowKill(banned.Human);
+                    break;
                 }
             }
 
@@ -201,6 +213,7 @@ public class GameController : MonoBehaviour
                 backendUserManager.BanUser(killId, "Вы протрясли свою победу!");
             }
         }
+
 
         _tryaskaList.Clear();
         _killList.Clear();
@@ -226,6 +239,9 @@ public class GameController : MonoBehaviour
             human.ShowHuman();
             human.ChangeAnimation(HumanAnimation.Idle);
 
+            if (backendUserManager.GetUsersWithNames().TryGetValue(humanGuid, out var playerNickname)) 
+                human.AddPlayerName(playerNickname);
+            
             _humans[humanGuid] = humanData;
             backendUserManager.SendClientCharacter(humanData.Guid, humanData.HumanName);
             OnAddHuman?.Invoke(humanData.HumanName, humanData.Guid);
