@@ -5,6 +5,7 @@ using System.Linq;
 using ForTests.Examples;
 using InGameBehaviours;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 public class GameController : MonoBehaviour
@@ -14,6 +15,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
     [SerializeField] private UIkill uiKill;
+    [SerializeField] private GameObject codeGameObject;
 
 
     private Stack<Human> _freeHumans;
@@ -124,6 +126,7 @@ public class GameController : MonoBehaviour
     [Button]
     public void StartGame()
     {
+        codeGameObject.SetActive(false);
         _musicStarted = true;
         backendUserManager.StateStart();
         pool.EnableBubbles();
