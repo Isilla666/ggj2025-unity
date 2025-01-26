@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using ForTests.Examples;
 using InGameBehaviours;
 using Sirenix.OdinInspector;
@@ -20,6 +21,8 @@ public class GameController : MonoBehaviour
     private Coroutine _coWaitForDead;
     private List<string> _killList;
     private List<string> _healthList;
+    private List<string> _tryaskaList;
+    
     private bool _musicStarted;
     public event Action<string, string> OnAddHuman;
 
@@ -29,6 +32,7 @@ public class GameController : MonoBehaviour
         _humans = new Dictionary<string, HumanData>(16);
         _killList = new List<string>(16);
         _healthList = new List<string>(16);
+        _tryaskaList = new List<string>(16);
     }
 
     private void Start()
@@ -88,6 +92,8 @@ public class GameController : MonoBehaviour
     {
         if (!_musicStarted)
         {
+            _tryaskaList.Remove(humanGuid);
+            
             if (time > 1000)
             {
                 _killList.Add(humanGuid);
@@ -123,6 +129,8 @@ public class GameController : MonoBehaviour
             humanData.Human.ChangeAnimation(HumanAnimation.Idle);
 
         _healthList.AddRange(_humans.Keys);
+        _tryaskaList.AddRange(_humans.Keys);
+        
         sonyEricssonPlayer.NextClip(ClipEnd);
     }
 
@@ -160,12 +168,13 @@ public class GameController : MonoBehaviour
 
         _healthList.Clear();
         yield return new WaitForSeconds(2f);
+        var bannedPlayers = _killList.Union(_tryaskaList).ToList();
         
-        if (_killList.Count > 0)
+        if (bannedPlayers.Count > 0)
         {
             foreach (var humanData in _humans.Values)
             {
-                if (_killList.Contains(humanData.Guid))
+                if (bannedPlayers.Contains(humanData.Guid))
                 {
                     humanData.Human.ChangeAnimation(HumanAnimation.PoopMoment);
                 }
@@ -183,7 +192,7 @@ public class GameController : MonoBehaviour
         }
 
 
-        foreach (var killId in _killList)
+        foreach (var killId in bannedPlayers)
         {
             if (_humans.TryGetValue(killId, out var humanData))
             {
@@ -193,6 +202,7 @@ public class GameController : MonoBehaviour
             }
         }
 
+        _tryaskaList.Clear();
         _killList.Clear();
         StartGame();
     }
