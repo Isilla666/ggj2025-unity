@@ -4,13 +4,11 @@ using UnityEngine;
 public class Fader : MonoBehaviour
 {
     [SerializeField] private SpriteRenderer spriteRenderer;
-
-    private float tempAlpha;
+    
     public void Fade(float time)
     {
         if (spriteRenderer != null)
         {
-            tempAlpha = spriteRenderer.color.a;
             spriteRenderer.DOFade(0f, time);
         }
     }
@@ -18,7 +16,7 @@ public class Fader : MonoBehaviour
     public void UnFade()
     {
         if (spriteRenderer != null)
-            spriteRenderer.DOFade(tempAlpha, 0.2f);
+            spriteRenderer.DOFade(1f, 0.2f);
     }
     
     private void OnValidate()
