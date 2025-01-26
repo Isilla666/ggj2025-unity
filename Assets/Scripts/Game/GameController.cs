@@ -12,21 +12,25 @@ public class GameController : MonoBehaviour
     [SerializeField] private SonyEricssonPlayer sonyEricssonPlayer;
     [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
-    
+
     private Stack<Human> _freeHumans;
-    private List<HumanData> _humanDatas;
+    private Dictionary<string, HumanData> _humans;
+
+    // private List<HumanData> _humanDatas;
     private Coroutine _coWaitForDead;
     private List<string> _killList;
+    private List<string> _healthList;
     private bool _musicStarted;
     public event Action<string, string> OnAddHuman;
-    
+
     private void Awake()
     {
-        _freeHumans = new Stack<Human>();
-        _humanDatas = new List<HumanData>();
-        _killList = new List<string>();
+        _freeHumans = new Stack<Human>(16);
+        _humans = new Dictionary<string, HumanData>(16);
+        _killList = new List<string>(16);
+        _healthList = new List<string>(16);
     }
-    
+
     private void Start()
     {
         backendUserManager.OnUserConnectedEvent += AddHuman;
@@ -36,57 +40,66 @@ public class GameController : MonoBehaviour
         backendUserManager.OnUserNoTimeStopEvent += BackendUserManagerOnOnUserNoTimeStopEvent;
         humans.ForEach(x => _freeHumans.Push(x));
     }
-    
+
     private void BackendUserManagerOnOnUserNoTimeStopEvent(string humanGuid)
     {
         //todo проверка
-        foreach (var humanData in _humanDatas)
+
+        // Если мы перестали трясти - добавляемся в health list
+        if (_musicStarted)
         {
-            if (humanData.Guid == humanGuid)
+            _healthList.Add(humanGuid);
+
+            if (_humans.TryGetValue(humanGuid, out var humanData))
             {
-                humanData.Health--;
-                if (humanData.Health <= 0)
-                {
-                    _killList.Add(humanData.Guid);
-                }
+                humanData.Human.ChangeAnimation(HumanAnimation.Idle);
             }
         }
+
+
+        //
+        // if (_humans.TryGetValue(humanGuid, out var humanData))
+        // {
+        //     humanData.Health--;
+        //
+        //     if (humanData.Health <= 0)
+        //     {
+        //         _killList.Add(humanGuid);
+        //     }
+        // }
     }
-    
+
     private void BackendUserManagerOnOnUserStartShakeEvent(string humanGuid)
     {
         //todo проверка
-        if(_musicStarted)
+        if (_musicStarted)
         {
-            foreach (var humanData in _humanDatas)
+            if (_humans.TryGetValue(humanGuid, out var humanData))
             {
-                if (humanData.Guid == humanGuid)
-                {
-                    humanData.Human.ChangeAnimation(HumanAnimation.Dancing);
-                }
+                humanData.Human.ChangeAnimation(HumanAnimation.Dancing);
             }
+
+            // Если начали трясти - убираемся из _healthList;
+            _healthList.Remove(humanGuid);
         }
     }
-    
+
     private void BackendUserManagerOnOnUserStopEvent(string humanGuid, int time)
     {
-        if(!_musicStarted)
+        if (!_musicStarted)
         {
             if (time > 1000)
             {
                 _killList.Add(humanGuid);
             }
 
-            foreach (var humanData in _humanDatas)
+            if (_humans.TryGetValue(humanGuid, out var humanData))
             {
-                if (humanData.Guid == humanGuid)
-                {
-                    humanData.Human.ChangeAnimation(HumanAnimation.Idle);
-                }
+                humanData.Human.ChangeAnimation(HumanAnimation.Idle);
             }
         }
     }
-    
+
     private void BackendUserManagerOnOnUserDisconnectedEvent(string humanGuid)
     {
         _killList.Add(humanGuid);
@@ -95,27 +108,31 @@ public class GameController : MonoBehaviour
             if (humanData.Guid == humanGuid)
             {
                 humanData.Human.FadeHuman();
-                
+
             }
         }*/
     }
-    
+
     [Button]
     public void StartGame()
     {
         _musicStarted = true;
         backendUserManager.StateStart();
         pool.EnableBubbles();
-        _humanDatas.ForEach(x=>x.Human.ChangeAnimation(HumanAnimation.Idle));
+        foreach (var humanData in _humans.Values)
+            humanData.Human.ChangeAnimation(HumanAnimation.Idle);
+
+        _healthList.AddRange(_humans.Keys);
         sonyEricssonPlayer.NextClip(ClipEnd);
     }
-    
+
     private void ClipEnd()
     {
         if (_coWaitForDead != null)
         {
             StopCoroutine(_coWaitForDead);
         }
+
         _coWaitForDead = StartCoroutine(WaitForDead());
     }
 
@@ -124,41 +141,62 @@ public class GameController : MonoBehaviour
         _musicStarted = false;
         backendUserManager.StateStop();
         pool.DisableBubbles();
-        yield return new WaitForSeconds(3f);
-        if (_killList.Count > 0)
+
+        // TODO еще один лист, куда запишем всех кто остановился.
+        // ПО истечению 3х секунд киляем еще и тех, кто вообще не думал останавливаться.
+
+        if (_healthList.Count > 0)
         {
-            foreach (var killMan in _killList)
+            foreach (var guid in _healthList)
             {
-                foreach (var humanData in _humanDatas)
+                if (_humans.TryGetValue(guid, out var humanData))
                 {
-                    if (humanData.Guid == killMan)
-                    {
-                        humanData.Human.ChangeAnimation(HumanAnimation.PoopMoment);
-                    }
-                    else
-                    {
-                        if (!_killList.Contains(humanData.Guid))
-                        {
-                            humanData.Human.ChangeAnimation(HumanAnimation.Haha);
-                        }
-                    }
+                    humanData.Health--;
+                    if (humanData.Health <= 0)
+                        _killList.Add(guid);
                 }
             }
-            yield return new WaitForSeconds(10f);
+        }
+
+        _healthList.Clear();
+        yield return new WaitForSeconds(2f);
+        
+        if (_killList.Count > 0)
+        {
+            foreach (var humanData in _humans.Values)
+            {
+                if (_killList.Contains(humanData.Guid))
+                {
+                    humanData.Human.ChangeAnimation(HumanAnimation.PoopMoment);
+                }
+                else
+                {
+                    humanData.Human.ChangeAnimation(HumanAnimation.Haha);
+                }
+            }
+
+            yield return new WaitForSeconds(8f);
         }
         else
         {
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
         }
-        _killList.ForEach(x=>_humanDatas.RemoveAll(y=>y.Guid == x));
+
+
+        foreach (var killId in _killList)
+        {
+            if (_humans.TryGetValue(killId, out var humanData))
+            {
+                _freeHumans.Push(humanData.Human);
+                _humans.Remove(killId);
+                backendUserManager.BanUser(killId, "Вы протрясли свою победу!");
+            }
+        }
+
         _killList.Clear();
-        _musicStarted = true;
-        backendUserManager.StateStart();
-        _humanDatas.ForEach(x=>x.Human.ChangeAnimation(HumanAnimation.Idle));
-        pool.EnableBubbles();
-        sonyEricssonPlayer.NextClip(ClipEnd);
+        StartGame();
     }
-    
+
     private void AddHuman(string humanGuid)
     {
         if (_freeHumans.Count > 0)
@@ -168,12 +206,17 @@ public class GameController : MonoBehaviour
             {
                 HumanName = human.HumanName,
                 Guid = humanGuid,
-                Human = human
+                Human = human,
+                Health = 3,
             };
-            
+
             human.gameObject.SetActive(true);
-            
-            _humanDatas.Add(humanData);
+
+            // Это нужно, потому что после того, как пользователь Poop, он Fade в 0
+            human.ShowHuman();
+            human.ChangeAnimation(HumanAnimation.Idle);
+
+            _humans[humanGuid] = humanData;
             backendUserManager.SendClientCharacter(humanData.Guid, humanData.HumanName);
             OnAddHuman?.Invoke(humanData.HumanName, humanData.Guid);
         }

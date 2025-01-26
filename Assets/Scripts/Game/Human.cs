@@ -9,33 +9,28 @@ public class Human : MonoBehaviour
     [SerializeField] private float fadeDuration;
     [SerializeField] private List<HumanAnimationModel> humanAnimationModels;
     [SerializeField] private List<Fader> faders;
-    
+
     private List<BaseAnimation> _currentAnimations;
 
     public string HumanName => humanName;
 
-    private void Awake()
-    {
-        _currentAnimations = new List<BaseAnimation>();
-    }
+    private void Awake() => _currentAnimations = new List<BaseAnimation>();
 
-    private void Start()
-    {
-        ChangeAnimation(HumanAnimation.Idle);
-    }
+    private void Start() => ChangeAnimation(HumanAnimation.Idle);
+
+    private void OnEnable() => faders.ForEach(x => x.UnFade());
 
     [Button]
-    public void FadeHuman()
-    {
-        faders.ForEach(x=>x.Fade(fadeDuration));
-    }
+    public void FadeHuman() => faders.ForEach(x => x.Fade(fadeDuration));
 
+    public void ShowHuman() => faders.ForEach(x => x.UnFade());
+    
     [Button]
     public void ChangeAnimation(HumanAnimation humanAnimation)
     {
-        _currentAnimations.ForEach(x=>x.StopAnimation());
+        _currentAnimations.ForEach(x => x.StopAnimation());
         _currentAnimations.Clear();
-        
+
         foreach (var humanAnimationModel in humanAnimationModels)
         {
             if (humanAnimationModel.HumanAnimation == humanAnimation)

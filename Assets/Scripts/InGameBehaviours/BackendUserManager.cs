@@ -104,7 +104,7 @@ namespace InGameBehaviours
              *      через сколько остановили тряску
              */
 
-            if (string.IsNullOrEmpty(data.UserCustomData.ToString()))
+            if (!string.IsNullOrEmpty(data.UserCustomData.ToString()))
             {
                 if (int.TryParse(data.UserCustomData.ToString(), out var time))
                 {

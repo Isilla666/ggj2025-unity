@@ -12,6 +12,12 @@ public class Fader : MonoBehaviour
             spriteRenderer.DOFade(0f, time);
         }
     }
+
+    public void UnFade()
+    {
+        if (spriteRenderer != null)
+            spriteRenderer.DOFade(1f, 0.2f);
+    }
     
     private void OnValidate()
     {
