@@ -16,6 +16,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Pool pool;
     [SerializeField] private List<Human> humans;
     [SerializeField] private UIkill uiKill;
+    [SerializeField] private UIWin uiWin;
     [SerializeField] private GameObject codeGameObject;
 
 
@@ -220,7 +221,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(6f);
+            yield return new WaitForSeconds(4f);
 
 
             foreach (var bannedPlayer in bannedPlayers)
@@ -232,7 +233,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(3f);
+            yield return new WaitForSeconds(5f);
         }
         else
         {
@@ -250,10 +251,23 @@ public class GameController : MonoBehaviour
             }
         }
 
-
         _tryaskaList.Clear();
         _killList.Clear();
-        StartGame();
+
+        var lastPlayer = _humans.Count <= 1;
+        if (lastPlayer)
+        {
+            var lastHuman = _humans.Values.FirstOrDefault()?.Human;
+            if (lastHuman == null)
+                lastHuman = humans.First();
+            
+            uiWin.ShowWin(lastHuman);
+        }
+        else
+        {
+            StartGame();
+        }        
+        
     }
 
     private void AddHuman(string humanGuid)
