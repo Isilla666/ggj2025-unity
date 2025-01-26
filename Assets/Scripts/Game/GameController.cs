@@ -186,6 +186,8 @@ public class GameController : MonoBehaviour
                 }
             }
 
+            yield return new WaitForSeconds(6f);
+
 
             foreach (var bannedPlayer in bannedPlayers)
             {
@@ -196,7 +198,7 @@ public class GameController : MonoBehaviour
                 }
             }
 
-            yield return new WaitForSeconds(8f);
+            yield return new WaitForSeconds(3f);
         }
         else
         {
@@ -239,9 +241,9 @@ public class GameController : MonoBehaviour
             human.ShowHuman();
             human.ChangeAnimation(HumanAnimation.Idle);
 
-            if (backendUserManager.GetUsersWithNames().TryGetValue(humanGuid, out var playerNickname)) 
+            if (backendUserManager.GetUsersWithNames().TryGetValue(humanGuid, out var playerNickname))
                 human.AddPlayerName(playerNickname);
-            
+
             _humans[humanGuid] = humanData;
             backendUserManager.SendClientCharacter(humanData.Guid, humanData.HumanName);
             OnAddHuman?.Invoke(humanData.HumanName, humanData.Guid);

@@ -12,30 +12,25 @@ public class UIkill : MonoBehaviour
     [SerializeField] private TMP_Text title;
 
     private bool _isEnabled;
-    
+
     public void ShowKill(Human human)
     {
-        if(!_isEnabled)
+        if (!_isEnabled)
         {
             _isEnabled = true;
-            
+
             icon.sprite = human.FailIcon;
             title.text = human.PlayerName;
             gameObject.SetActive(true);
-            DOTween.Sequence().AppendInterval(5f)
-                .AppendCallback(() =>
-                {
-                    button.sprite = pressed;
-                })
-                .AppendInterval(1f)
-                .AppendCallback(() =>
-                {
-                    button.sprite = normal;
-                })
-                .AppendInterval(1f)
+            DOTween.Sequence().AppendInterval(3f)
+                .AppendCallback(() => { button.sprite = pressed; })
+                .AppendInterval(0.5f)
+                .AppendCallback(() => { button.sprite = normal; })
+                .AppendInterval(0.5f)
                 .OnComplete(() =>
                 {
                     _isEnabled = false;
+                    gameObject.SetActive(false);
                 });
         }
     }
