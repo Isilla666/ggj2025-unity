@@ -62,6 +62,7 @@ public class Human : MonoBehaviour
         if (humanAnimation == HumanAnimation.PoopMoment)
         {
             AudioSource.PlayClipAtPoint(bubbleClip, transform.position);
+            playerNameTMP.text = string.Empty;
             Invoke(nameof(FadeHuman), 5f);
         }
     }

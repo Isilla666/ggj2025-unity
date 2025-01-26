@@ -265,6 +265,9 @@ public class GameController : MonoBehaviour
                 lastHuman = humans.First();
             
             uiWin.ShowWin(lastHuman);
+
+            foreach (var usersWithName in backendUserManager.GetUsersWithNames()) 
+                backendUserManager.BanUser(usersWithName.Key, "Игра окончена!");
         }
         else
         {
