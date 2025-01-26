@@ -13,7 +13,8 @@ public class Human : MonoBehaviour
     [SerializeField] private List<HumanAnimationModel> humanAnimationModels;
     [SerializeField] private List<Fader> faders;
     [SerializeField] private TMP_Text playerNameTMP;
-
+    [SerializeField] private AudioClip bubbleClip;
+    
     private List<BaseAnimation> _currentAnimations;
 
     public string HumanName => humanName;
@@ -60,6 +61,7 @@ public class Human : MonoBehaviour
 
         if (humanAnimation == HumanAnimation.PoopMoment)
         {
+            AudioSource.PlayClipAtPoint(bubbleClip, transform.position);
             Invoke(nameof(FadeHuman), 5f);
         }
     }

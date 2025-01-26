@@ -72,8 +72,8 @@ namespace InGameBehaviours
              * TODO
              *  По идее здесь мы должны создать персонажа для игрока, посадить персонажа и отправить данные о персонаже игроку в браузер
              */
-            OnUserConnectedEvent?.Invoke(data.UserId);
             _connectedUsers[data.UserId] = data;
+            OnUserConnectedEvent?.Invoke(data.UserId);
         }
 
         private void OnClientDisconnected(ClientConnectedEvent.ClientData data)
@@ -82,8 +82,8 @@ namespace InGameBehaviours
              * TODO
              *  По идее здесь мы должны удалить персонажа игрока
              */
-            OnUserDisconnectedEvent?.Invoke(data.UserId);
             _connectedUsers.Remove(data.UserId);
+            OnUserDisconnectedEvent?.Invoke(data.UserId);
         }
 
         private void OnUserStartShake(CustomUserDataEvent.UserData data)

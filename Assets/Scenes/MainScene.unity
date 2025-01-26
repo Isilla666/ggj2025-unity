@@ -166,6 +166,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.78
       objectReference: {fileID: 0}
+    - target: {fileID: 1876683624777306506, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3444867587278836450, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_SortingOrder
       value: 110
@@ -620,6 +624,10 @@ PrefabInstance:
     - target: {fileID: 1559381535433637860, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_LocalPosition.y
       value: -2.84
+      objectReference: {fileID: 0}
+    - target: {fileID: 1876683624777306506, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3444867587278836450, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_SortingOrder
@@ -6650,6 +6658,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.75
       objectReference: {fileID: 0}
+    - target: {fileID: 1876683624777306506, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3304496020712880386, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_Color.b
       value: 0.52156866
@@ -8137,6 +8149,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -2.73
       objectReference: {fileID: 0}
+    - target: {fileID: 1876683624777306506, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
+      objectReference: {fileID: 0}
     - target: {fileID: 3444867587278836450, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_SortingOrder
       value: 102
@@ -8419,6 +8435,10 @@ PrefabInstance:
     - target: {fileID: 1559381535433637860, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_LocalPosition.y
       value: -2.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 1876683624777306506, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
+      propertyPath: m_LocalScale.x
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 3304496020712880386, guid: 3c927f0e7ca542a4f98cf6f4992508ec, type: 3}
       propertyPath: m_Color.b
@@ -10046,6 +10066,34 @@ PrefabInstance:
     - target: {fileID: 5702963782503246459, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
       propertyPath: m_text
       value: "\u041F\u043E\u0431\u0435\u0434\u0438\u0442\u0435\u043B\u044C"
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1200687719}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: RestartGame
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: GameController, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6202994641640873474, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     - target: {fileID: 7883930813074978973, guid: 477e47fc0934ad144af67ea2d66a27f4, type: 3}
       propertyPath: m_Pivot.x

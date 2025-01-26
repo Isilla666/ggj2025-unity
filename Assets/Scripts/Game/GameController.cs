@@ -8,6 +8,7 @@ using InGameBehaviours;
 using Sirenix.OdinInspector;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -42,6 +43,8 @@ public class GameController : MonoBehaviour
         _healthList = new List<string>(16);
         _tryaskaList = new List<string>(16);
     }
+
+    public void RestartGame() => SceneManager.LoadScene("MainScene");
 
     private void Start()
     {
