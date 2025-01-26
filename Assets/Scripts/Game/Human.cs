@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Sirenix.OdinInspector;
+using TMPro;
 using UnityEngine;
 
 public class Human : MonoBehaviour
@@ -11,10 +12,12 @@ public class Human : MonoBehaviour
     [SerializeField] private float fadeDuration;
     [SerializeField] private List<HumanAnimationModel> humanAnimationModels;
     [SerializeField] private List<Fader> faders;
+    [SerializeField] private TMP_Text playerNameTMP;
 
     private List<BaseAnimation> _currentAnimations;
 
     public string HumanName => humanName;
+    public string PlayerName { get; private set; }
 
     public Sprite FailIcon => failIcon;
 
@@ -25,6 +28,12 @@ public class Human : MonoBehaviour
     private void Start() => ChangeAnimation(HumanAnimation.Idle);
 
     private void OnEnable() => faders.ForEach(x => x.UnFade());
+
+    public void AddPlayerName(string namePlayer)
+    {
+        PlayerName = namePlayer;
+        playerNameTMP.text = namePlayer;
+    }
 
     [Button]
     public void FadeHuman() => faders.ForEach(x => x.Fade(fadeDuration));
