@@ -20,7 +20,7 @@ public class UIWin : MonoBehaviour
         {
             _isEnabled = true;
             
-            icon.sprite = human.FailIcon;
+            icon.sprite = human.WinIcon;
             title.text = human.PlayerName;
             gameObject.SetActive(true);
             _isEnabled = false;
